@@ -7,7 +7,7 @@ import { map, filter, switchMap, scan, throttleTime, take, reduce } from 'https:
 console.log('index.js loaded')
 
 
-// 
+// click streaming (from rxjs docs)
 
 fromEvent(document, 'click')
     .pipe(
@@ -24,7 +24,7 @@ fromEvent(document, 'click')
     .subscribe(mousePosX => console.log(`clicked in ${mousePosX}`))
 
 
-//
+// click stream throttling (from rxjs docs)
 
 const btn = document.querySelector('.refresh-btn') 
 fromEvent(btn, 'click')
@@ -32,7 +32,7 @@ fromEvent(btn, 'click')
     .subscribe(() => console.log('refreshing...'))
 
 
-// 
+// array-like stream example (1st lesson)
 
 const arr = ['1', '2', '3', 'hello', '321', 'number']
 const arrStream = interval(400)

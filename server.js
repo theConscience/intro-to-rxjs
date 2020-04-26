@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 
 app.use(express.static('dist'))
+app.use(express.static('node_modules'))
 
 app.use('*', (res, req) => {
     res.sendFile('dist/index.html')

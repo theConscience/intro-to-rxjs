@@ -1,4 +1,4 @@
-import Rx from '@reactivex/rxjs'
+import Rx from 'rxjs5'
 // import * as Rx from 'rxjs'
 // import * as rxjs from 'rxjs'
 
