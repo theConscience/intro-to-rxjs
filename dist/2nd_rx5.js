@@ -10,7 +10,7 @@ let clickStream = Rx.Observable.fromEvent(button, 'click')
 clickStream.subscribe(() => console.log('click'))
 
 let dblClickStream = clickStream
-    .buffer(clickStream.debounceTime(250))
+    .buffer(clickStream.debounceTime(200))
     .map(arr => {
         console.log('arr:', arr)
         return arr.length

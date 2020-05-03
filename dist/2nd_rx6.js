@@ -1,23 +1,25 @@
 console.log('2nd_rx6.js is loading...')
 
-import * as Rx from 'https://dev.jspm.io/rxjs@6/_esm2015'
-import * as Op from 'https://dev.jspm.io/rxjs@6/_esm2015/operators'
+// import * as Rx from 'https://dev.jspm.io/rxjs@6/_esm2015'
+// import * as Op from 'https://dev.jspm.io/rxjs@6/_esm2015/operators'
+import { fromEvent } from 'https://dev.jspm.io/rxjs@6/_esm2015'
+import { buffer, map, filter, debounceTime } from 'https://dev.jspm.io/rxjs@6/_esm2015/operators'
 
 
 const btn = document.querySelector('.some-btn')
 const label = document.querySelector('h4')
 
-let clickStream = Rx.fromEvent(btn, 'click')
+let clickStream =fromEvent(btn, 'click')
 clickStream.subscribe(() => console.log('click'))
 
 let doubleClickStream = clickStream
     .pipe(
-        Op.buffer(clickStream.pipe(Op.debounceTime(250))),
-        Op.map(arr => {
+        buffer(clickStream.pipe(debounceTime(200))),
+        map(arr => {
             console.log('arr:', arr)
             return arr.length
         }),
-        Op.filter(len => {
+        filter(len => {
             console.log('len:', len)
             return len === 2
         })
@@ -30,7 +32,7 @@ doubleClickStream.subscribe(evt => {
 
 const secondAfterDoubleClickStream = doubleClickStream
     .pipe(
-        Op.debounceTime(1 * 1000)
+        debounceTime(1 * 1000)
     )
 
 secondAfterDoubleClickStream.subscribe(evt => {
