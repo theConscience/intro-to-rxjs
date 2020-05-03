@@ -18,7 +18,7 @@ const refreshRequestStream = refreshClickStream
 refreshRequestStream.subscribe(url => console.log('refresh request url will be a random url, for example:',url))
 
 // merging above 2 Streams into one:
-const requestStream = Rx.Observable.merge(startupRequestStream, refreshRequestStream)
+const requestStream = startupRequestStream.merge(refreshRequestStream)
 requestStream.subscribe(response => console.log('merged request stream response:', response))
 
 // use 3rd tryish tyle from 4th example...
