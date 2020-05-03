@@ -10,9 +10,8 @@ const refreshClickStream = Rx.Observable.fromEvent(refreshBtn, 'click')
 refreshClickStream.subscribe(evt => console.log('Refresh click fired!'))
 
 // map clicks to url stream and adds initial value for startup:
-const requestStream = refreshClickStream
+const requestStream = refreshClickStream.startWith('startup click')
     .map(() => `https://api.github.com/users?since=${Math.floor(Math.random() * 500)}`)
-    .startWith('https://api.github.com/users')
 requestStream.subscribe(response => console.log('merged request stream response:', response))
 
 // use 3rd tryish style from 4th example...

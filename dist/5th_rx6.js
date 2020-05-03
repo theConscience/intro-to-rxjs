@@ -14,8 +14,8 @@ refreshClickStream.subscribe(evt => console.log('Refresh click fired!'))
 // map clicks to url stream and adds initial value for startup:
 const requestStream = refreshClickStream
     .pipe(
-        map(() => `https://api.github.com/users?since=${Math.floor(Math.random() * 500)}`),
-        startWith('https://api.github.com/users')
+        startWith('startup click'),
+        map(() => `https://api.github.com/users?since=${Math.floor(Math.random() * 500)}`)
     )
 requestStream.subscribe(response => console.log('merged request stream response:', response))
 
