@@ -15,7 +15,7 @@ const requestStream = refreshClickStream
     .startWith('https://api.github.com/users')
 requestStream.subscribe(response => console.log('merged request stream response:', response))
 
-// use 3rd tryish tyle from 4th example...
+// use 3rd tryish style from 4th example...
 const responseStream = requestStream
     .flatMap(url => Rx.Observable.fromPromise(fetch(url).then(response => response.json())))
 responseStream.subscribe(jsonData => console.log('response json data:', jsonData))
