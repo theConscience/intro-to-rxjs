@@ -5,13 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        .suggestions-list {
+            list-style: none;
+        }
+        .suggestions-list__item {
+            padding: 0;
+            margin: 0;
+            margin-bottom: 24px;
+        }
+        .media-card {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        .media-card__image {
+            display: block;
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+        .media-card__title {
+            margin-right: 12px;
+        }
+    </style>
+
+
 </head>
 <body>
     <button class="some-btn">Button</button>
     <h4>—</h4>
     <br>
     <br>
-    <button class="refresh-btn">Обновить данные</button>
+    <section class="suggestions">
+        <header class="suggestions__header">
+            <h3>Who to follow?</h3>
+            <a class="suggestions__refresh refresh-btn" href="#">Обновить данные</a>
+        </header>
+        <ul class="suggestions__list suggestions-list">
+            <li class="suggestions-list__item">
+                <div class="suggestions-list__suggestion suggestions-list__suggestion--1 media-card">
+                    <img class="media-card__image" src="" alt="">
+                    <a class="media-card__title" href="" target="_blank">Placeholder title 1</a>
+                    <p class="media-card__description"></p>
+                    <a class="media-card__button media-card__button--close" href="#">X</a>
+                </div>
+            </li>
+            <li class="suggestions-list__item">
+                <div class="suggestions-list__suggestion suggestions-list__suggestion--2 media-card">
+                    <img class="media-card__image" src="" alt="">
+                    <a class="media-card__title" href="" target="_blank">Placeholder title 2</a>
+                    <p class="media-card__description"></p>
+                    <a class="media-card__button media-card__button--close" href="#">X</a>
+                </div>
+            </li>
+            <li class="suggestions-list__item">
+                <div class="suggestions-list__suggestion suggestions-list__suggestion--3 media-card">
+                    <img class="media-card__image" src="" alt="">
+                    <a class="media-card__title" href="" target="_blank">Placeholder title 3</a>
+                    <p class="media-card__description"></p>
+                    <a class="media-card__button media-card__button--close" href="#">X</a>
+                </div>
+            </li>
+        </ul>
+    </section>
     <!-- <script type="module" src="/index_rx6.js"></script> -->
     <script src="https://npmcdn.com/rxjs@5.0.0-beta.1/bundles/Rx.umd.js"></script>
     <!-- <script type="module" src="/1st_rx5.js"></script> -->
@@ -23,7 +83,9 @@
     <!-- <script type="module" src="/4th_rx5.js"></script> -->
     <!-- <script type="module" src="/4th_rx6.js"></script> -->
     <!-- <script type="module" src="/5th_rx5.js"></script> -->
-    <script type="module" src="/5th_rx6.js"></script>
+    <!-- <script type="module" src="/5th_rx6.js"></script> -->
+    <script type="module" src="/6th_rx5.js"></script>
+    <!-- <script type="module" src="/6th_rx6.js"></script> -->
 </body>
 
 </html>
