@@ -16,6 +16,7 @@ const requestStream = refreshClickStream.startWith('startup click')
 // use 3rd tryish style from 4th example...
 const responseStream = requestStream
     .flatMap(url => Rx.Observable.fromPromise(fetch(url).then(response => response.json())))
+    .publishReplay().refCount(1)
 
 // responseStream.subscribe(jsonData => console.log('response json data:', jsonData))
 
@@ -54,7 +55,6 @@ function renderSuggestion (user, suggestionSelector) {
         // clear previous elements in DOM
         console.log(`Clearing previous suggestion ${suggestionSelector}...`)
         suggestionEl.style.visibility = 'hidden'
-        suggestionEl.img.src = ''
         // const suggestionsElements = Array.from(suggestionsList.querySelectorAll('.suggestions-list__suggestion'))
         // suggestionsElements.forEach(suggestionEl => {
         //     suggestionEl.style.visibility = 'hidden'
