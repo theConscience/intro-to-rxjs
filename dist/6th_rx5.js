@@ -11,13 +11,13 @@ const refreshClickStream = Rx.Observable.fromEvent(refreshBtn, 'click')
 
 // map clicks to url stream and adds initial value for startup:
 const requestStream = refreshClickStream.startWith('startup click')
-    .map(() => `https://api.github.com/users?since=${Math.floor(Math.random() * 500)}`)
+    .map(() => `https://api.github.com/users?since=${Math.floor(Math.random() * 500)}`) // returns new stream
 
 // use 3rd tryish style from 4th example...
 const responseStream = requestStream
     .flatMap(url => Rx.Observable.fromPromise(fetch(url).then(response => response.json())))
 
-responseStream.subscribe(jsonData => console.log('response json data:', jsonData))
+// responseStream.subscribe(jsonData => console.log('response json data:', jsonData))
 
 const suggestionStream1 = createSuggestionStream(responseStream)
 const suggestionStream2 = createSuggestionStream(responseStream)
@@ -25,8 +25,9 @@ const suggestionStream3 = createSuggestionStream(responseStream)
 
 function createSuggestionStream (responseStream) {
     return responseStream
-        .map(usersList => usersList[Math.floor(Math.random() * usersList.length)])
+        .map(usersList => usersList[Math.floor(Math.random() * usersList.length)]) // returns new stream!
         .startWith(null)  // defining all stream dynamic behaviour at the time of declaration, start stream with null value
+        .merge(refreshClickStream.map(ev => null))
 }
 
 suggestionStream1.subscribe(userOrNull => renderSuggestion(userOrNull, '.suggestions-list__suggestion--1'))
@@ -43,16 +44,17 @@ function renderSuggestion (user, suggestionSelector) {
         console.log(`user ${user.login} data is:`)
         console.dir(user)
         // rendering received elements to the DOM
-        suggestionEl.style.visibility = 'visible'
         fillSuggestionWithData(suggestionEl, {
             img_url: user.avatar_url,
             title: user.login,
             title_link: user.html_url
         })
+        suggestionEl.style.visibility = 'visible'
     } else if (user === null) {
         // clear previous elements in DOM
         console.log(`Clearing previous suggestion ${suggestionSelector}...`)
         suggestionEl.style.visibility = 'hidden'
+        suggestionEl.img.src = ''
         // const suggestionsElements = Array.from(suggestionsList.querySelectorAll('.suggestions-list__suggestion'))
         // suggestionsElements.forEach(suggestionEl => {
         //     suggestionEl.style.visibility = 'hidden'
