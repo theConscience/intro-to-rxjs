@@ -5,9 +5,15 @@ console.log('Rx is:', Rx)
 
 const refreshBtn = document.querySelector('.refresh-btn')
 const suggestionsList = document.querySelector('.suggestions-list') 
+const closeBtn1 = suggestionsList.querySelector('.suggestions-list__suggestion--1 .media-card__button--close')
+const closeBtn2 = suggestionsList.querySelector('.suggestions-list__suggestion--2 .media-card__button--close')
+const closeBtn3 = suggestionsList.querySelector('.suggestions-list__suggestion--3 .media-card__button--close')
 
 // create Stream, for refresh button click events:
 const refreshClickStream = Rx.Observable.fromEvent(refreshBtn, 'click')
+const closeClickStream1 = Rx.Observable.fromEvent(closeBtn1, 'click')
+const closeClickStream2 = Rx.Observable.fromEvent(closeBtn2, 'click')
+const closeClickStream3 = Rx.Observable.fromEvent(closeBtn3, 'click')
 
 // map clicks to url stream and adds initial value for startup:
 const requestStream = refreshClickStream.startWith('startup click')
@@ -16,19 +22,25 @@ const requestStream = refreshClickStream.startWith('startup click')
 // use 3rd tryish style from 4th example...
 const responseStream = requestStream
     .flatMap(url => Rx.Observable.fromPromise(fetch(url).then(response => response.json())))
-    .publishReplay().refCount(1)
+    .publishReplay().refCount(1)  // adds cashing, now all responseStream.subscribers uses same xhr request 
 
 // responseStream.subscribe(jsonData => console.log('response json data:', jsonData))
 
-const suggestionStream1 = createSuggestionStream(responseStream)
-const suggestionStream2 = createSuggestionStream(responseStream)
-const suggestionStream3 = createSuggestionStream(responseStream)
+const suggestionStream1 = createSuggestionStream(responseStream, closeClickStream1)
+const suggestionStream2 = createSuggestionStream(responseStream, closeClickStream2)
+const suggestionStream3 = createSuggestionStream(responseStream, closeClickStream3)
 
-function createSuggestionStream (responseStream) {
+function createSuggestionStream (responseStream, closeClickStream) {
     return responseStream
-        .map(usersList => usersList[Math.floor(Math.random() * usersList.length)]) // returns new stream!
+        .map(getRandomUser) // returns new stream!
         .startWith(null)  // defining all stream dynamic behaviour at the time of declaration, start stream with null value
-        .merge(refreshClickStream.map(ev => null))
+        .merge(refreshClickStream.map(() => null))
+        .merge(closeClickStream.map(() => null))
+        .merge(closeClickStream.combineLatest(responseStream, (click, usersList) => getRandomUser(usersList)))
+}
+
+function getRandomUser (usersList) {
+    return usersList[Math.floor(Math.random() * usersList.length)]
 }
 
 suggestionStream1.subscribe(userOrNull => renderSuggestion(userOrNull, '.suggestions-list__suggestion--1'))
@@ -50,7 +62,6 @@ function renderSuggestion (user, suggestionSelector) {
             title: user.login,
             title_link: user.html_url
         })
-        suggestionEl.style.visibility = 'visible'
     } else if (user === null) {
         // clear previous elements in DOM
         console.log(`Clearing previous suggestion ${suggestionSelector}...`)
@@ -75,6 +86,12 @@ function fillSuggestionWithData (el, userData) {
     image.src = userData.img_url
     title.textContent = userData.title
     title.href = userData.title_link
+    image.addEventListener('load', onImgLoad)
+
+    function onImgLoad () {
+        el.style.visibility = 'visible'
+        image.removeEventListener('load', onImgLoad)
+    }
 }
 
 console.log('6th_rx5.js was loaded!')
